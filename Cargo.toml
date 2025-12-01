@@ -1,0 +1,11 @@
+[package]
+name = "aoc-2025"
+version = "0.1.0"
+edition = "2024"
+authors = ["Louis Meyer (H1ghBre4k3r) <h1ghbe4k3r@dev.bre4k3r.de>"]
+readme = "README.md"
+repository = "https://github.com/H1ghBre4k3r/aoc-2025"
+
+[dependencies]
+aoc-runner = "0.3.0"
+aoc-runner-derive = "0.3.0"

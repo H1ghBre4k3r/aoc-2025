@@ -96,9 +96,45 @@ pub fn part1(directions: &[Direction]) -> u64 {
     result
 }
 
+#[aoc_generator(day01, part2)]
+pub fn generator_part2(input: &str) -> Vec<Direction> {
+    input
+        .lines()
+        .map(|line| line.trim())
+        .map(|line| line.parse::<Direction>().unwrap())
+        .collect()
+}
+
+#[aoc(day01, part2)]
+pub fn part2(directions: &[Direction]) -> u64 {
+    let mut result: u64 = 0;
+    let mut counter = 50;
+
+    for direction in directions {
+        let total = direction.inner();
+        let offset = match direction {
+            Direction::Left(_) => -1,
+            Direction::Right(_) => 1,
+        };
+
+        // Yes. We do it like this. Simply, because I do not care enough
+        for _ in 0..total {
+            counter += offset;
+            if counter == 0 {
+                result += 1;
+            } else if counter == 100 || counter == -100 {
+                result += 1;
+                counter = 0;
+            }
+        }
+    }
+
+    result
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::day01::{generator_part1, part1};
+    use super::{generator_part1, generator_part2, part1, part2};
 
     const SAMPLE_INPUT: &str = "L68
     L30
@@ -139,5 +175,24 @@ mod tests {
         let result = part1(&generated);
 
         assert_eq!(result, 3)
+    }
+
+    #[test]
+    fn test_part2() {
+        let generated = generator_part2(SAMPLE_INPUT);
+        let result = part2(&generated);
+
+        assert_eq!(result, 6)
+    }
+
+    #[test]
+    fn test_part2_large_rotation() {
+        // Test with a large rotation that wraps multiple times
+        let large_input = "R1000";
+        let generated = generator_part2(large_input);
+        let result = part2(&generated);
+
+        // Starting at 50, R1000 should pass through 0 ten times
+        assert_eq!(result, 10)
     }
 }
